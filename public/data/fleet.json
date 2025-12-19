@@ -1,0 +1,32 @@
+[
+    {
+        "id": "f1",
+        "name": "Toyota Avanza",
+        "image": "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?q=80&w=1200",
+        "images": ["https://images.unsplash.com/photo-1619767886558-efdc259cde1a?q=80&w=1200"],
+        "price": "400000",
+        "duration": "1 Hari",
+        "pax": "7 Seat",
+        "description": "Mobil keluarga yang nyaman dengan kapasitas 7 penumpang, cocok untuk perjalanan keluarga."
+    },
+    {
+        "id": "f2",
+        "name": "Toyota Innova Reborn",
+        "image": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=1200",
+        "images": ["https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=1200"],
+        "price": "600000",
+        "duration": "1 Hari",
+        "pax": "7 Seat",
+        "description": "SUV premium dengan interior luas dan kenyamanan maksimal untuk perjalanan jauh."
+    },
+    {
+        "id": "f3",
+        "name": "Toyota Hiace",
+        "image": "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1200",
+        "images": ["https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1200"],
+        "price": "900000",
+        "duration": "1 Hari",
+        "pax": "16 Seat",
+        "description": "Minibus ideal untuk grup besar dengan fasilitas AC dan audio entertainment."
+    }
+]
