@@ -1,67 +1,85 @@
 @import "tailwindcss";
 
 @theme {
-  --color-forest-teal: #2A9D8F;
-  --color-forest-dark: #264653;
-  --color-sand: #E9C46A;
-  --color-sand-light: #F4E4BA;
-  --color-charcoal: #1a1a1a;
-  --color-charcoal-light: #2d2d2d;
+  --color-forest: #1e3a35;
+  --color-forest-light: #2A5A53;
+  --color-forest-dark: #122421;
+  --color-sand: #D9CBB6;
+  --color-sand-light: #f5eedf;
+  --color-charcoal: #151515;
+  --color-charcoal-light: #222222;
+  --color-accent: #E68A5C;
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
 }
 
 body {
-  background-color: #1a1a1a;
-  color: white;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--color-charcoal);
+  color: var(--color-sand-light);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+h1, h2, h3, h4, h5, h6, .font-serif {
+  font-family: var(--font-serif);
+}
+
 .glass {
-  backdrop-filter: blur(12px);
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px);
+  background-color: rgba(21, 21, 21, 0.4);
+  border: 1px solid rgba(217, 203, 182, 0.1);
 }
 
 .glass-dark {
-  backdrop-filter: blur(12px);
-  background-color: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  background-color: rgba(18, 36, 33, 0.8);
+  border-bottom: 1px solid rgba(217, 203, 182, 0.05);
 }
 
 .text-gradient {
-  background: linear-gradient(to right, #2A9D8F, #E9C46A);
+  background: linear-gradient(to right, var(--color-sand), var(--color-accent));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .glow {
-  box-shadow: 0 0 20px rgba(42, 157, 143, 0.5);
+  box-shadow: 0 0 40px rgba(30, 58, 53, 0.8);
 }
 
 .glow-hover {
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.4s ease, transform 0.4s ease;
 }
 
 .glow-hover:hover {
-  box-shadow: 0 0 30px rgba(42, 157, 143, 0.7);
+  box-shadow: 0 10px 40px rgba(30, 58, 53, 0.6);
+  transform: translateY(-4px);
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  background: var(--color-charcoal);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2A9D8F;
-  border-radius: 5px;
+  background: var(--color-forest-light);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #E9C46A;
+  background: var(--color-sand);
+}
+
+/* Utilities for hiding scrollbar in horizontal scroll */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

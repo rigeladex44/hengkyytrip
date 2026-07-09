@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import { Star } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
 
 const testimonials = [
   {
@@ -14,7 +15,7 @@ const testimonials = [
     name: "Siti Nurhaliza",
     location: "Surabaya",
     rating: 5,
-    comment: "Paket wisata Bromo-nya juara! Jeep-nya bagus, guide-nya asik diajak ngobrol. Pemandangannya gila keren banget. Thanks BromoTrip!",
+    comment: "Paket wisata Bromo-nya juara! Jeep-nya bagus, guide-nya asik diajak ngobrol. Pemandangannya gila keren banget. Thanks HengkyyTrip!",
   },
   {
     name: "Ahmad Rizki",
@@ -30,50 +31,71 @@ const testimonials = [
   },
 ]
 
-import { useLanguage } from "@/lib/language-context"
-
 export default function Testimonials() {
   const { t } = useLanguage()
 
+  // Double the array to ensure smooth infinite scrolling
+  const scrollItems = [...testimonials, ...testimonials]
+
   return (
-    <section id="testimonials" className="py-20 bg-[var(--color-charcoal-light)]">
-      <div className="container mx-auto px-4">
+    <section id="testimonials" className="py-24 md:py-32 bg-[var(--color-charcoal)] relative overflow-hidden border-t border-gray-900">
+      <div className="container mx-auto px-6 mb-16 md:mb-24 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
+          viewport={{ once: true, margin: "-100px" }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            {t.testimonials.title} <span className="text-gradient">{t.testimonials.titleAccent}</span>
-          </h2>
-          <p className="text-xl text-gray-300">{t.testimonials.subtitle}</p>
+          <h2 className="text-sm uppercase tracking-[0.3em] font-bold mb-4 text-gray-500">Testimonials</h2>
+          <h3 className="text-4xl md:text-5xl font-serif leading-[1.1] text-white">
+            {t.testimonials.title} <span className="italic text-[var(--color-sand)]">{t.testimonials.titleAccent}</span>
+          </h3>
         </motion.div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={testimonial.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ scale: 1.05 }}
-              className="glass p-6 rounded-2xl bg-[var(--color-charcoal)] border border-[var(--color-forest-dark)]"
-            >
-              <div className="flex gap-1 mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 fill-[var(--color-sand)] text-[var(--color-sand)]" />
-                ))}
-              </div>
-              <p className="text-gray-300 mb-6 italic">&quot;{testimonial.comment}&quot;</p>
-              <div className="border-t border-white/10 pt-4">
-                <p className="font-bold">{testimonial.name}</p>
-                <p className="text-sm text-gray-400">{testimonial.location}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+      {/* Infinite Marquee Container */}
+      <div className="relative w-full flex overflow-x-hidden">
+         {/* Gradient Masks for smooth fade out at edges */}
+         <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[var(--color-charcoal)] to-transparent z-10 hidden md:block"></div>
+         <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[var(--color-charcoal)] to-transparent z-10 hidden md:block"></div>
+
+         <motion.div
+            className="flex gap-6 md:gap-8 px-4"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ 
+              repeat: Infinity, 
+              ease: "linear", 
+              duration: 25 // Adjust for speed
+            }}
+            style={{ width: "fit-content" }}
+         >
+           {scrollItems.map((testimonial, index) => (
+             <div
+               key={`${testimonial.name}-${index}`}
+               className="w-[300px] md:w-[450px] flex-shrink-0 glass-dark p-8 md:p-10 border border-gray-800 flex flex-col justify-between group hover:border-gray-600 transition-colors"
+             >
+               <div>
+                 <div className="flex gap-1 mb-6">
+                   {[...Array(testimonial.rating)].map((_, i) => (
+                     <Star key={i} className="h-4 w-4 fill-[var(--color-sand)] text-[var(--color-sand)] opacity-70 group-hover:opacity-100 transition-opacity" />
+                   ))}
+                 </div>
+                 <p className="text-lg md:text-xl text-gray-300 font-serif italic leading-relaxed mb-8">
+                   "{testimonial.comment}"
+                 </p>
+               </div>
+               
+               <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#2a2a2a] flex items-center justify-center text-[var(--color-sand)] font-serif text-xl border border-gray-700">
+                    {testimonial.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="font-bold text-white text-sm tracking-wider uppercase">{testimonial.name}</p>
+                    <p className="text-xs text-gray-500 uppercase tracking-widest">{testimonial.location}</p>
+                  </div>
+               </div>
+             </div>
+           ))}
+         </motion.div>
       </div>
     </section>
   )

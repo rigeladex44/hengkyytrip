@@ -5,6 +5,7 @@ export const translations = {
         nav: {
             home: "Beranda",
             packages: "Paket Wisata",
+            gallery: "Galeri",
             testimonials: "Testimoni",
             contact: "Hubungi Kami"
         },
@@ -45,6 +46,11 @@ export const translations = {
             titleAccent: "Mereka?",
             subtitle: "Testimoni dari pelanggan yang puas"
         },
+        gallery: {
+            title: "Galeri",
+            titleAccent: "Perjalanan",
+            subtitle: "Momen tak terlupakan bersama kami"
+        },
         footer: {
             about: "Solusi perjalanan premium untuk liburan tak terlupakan di Jawa Timur.",
             links: "Tautan Cepat",
@@ -57,6 +63,7 @@ export const translations = {
         nav: {
             home: "Home",
             packages: "Tour Packages",
+            gallery: "Gallery",
             testimonials: "Testimonials",
             contact: "Contact Us"
         },
@@ -97,6 +104,11 @@ export const translations = {
             titleAccent: "Say?",
             subtitle: "Testimonials from satisfied customers"
         },
+        gallery: {
+            title: "Travel",
+            titleAccent: "Gallery",
+            subtitle: "Unforgettable moments with us"
+        },
         footer: {
             about: "Premium travel solutions for unforgettable holidays in East Java.",
             links: "Quick Links",
@@ -109,6 +121,7 @@ export const translations = {
         nav: {
             home: "Laman Utama",
             packages: "Pakej Pelancongan",
+            gallery: "Galeri",
             testimonials: "Testimoni",
             contact: "Hubungi Kami"
         },
@@ -149,6 +162,11 @@ export const translations = {
             titleAccent: "Mereka?",
             subtitle: "Testimoni daripada pelanggan yang berpuas hati"
         },
+        gallery: {
+            title: "Galeri",
+            titleAccent: "Perjalanan",
+            subtitle: "Detik yang tidak dapat dilupakan bersama kami"
+        },
         footer: {
             about: "Penyelesaian perjalanan premium untuk percutian yang tidak dapat dilupakan di Jawa Timur.",
             links: "Pautan Pantas",
@@ -161,6 +179,7 @@ export const translations = {
         nav: {
             home: "主页",
             packages: "旅游配套",
+            gallery: "画廊",
             testimonials: "客户评价",
             contact: "联系我们"
         },
@@ -200,6 +219,11 @@ export const translations = {
             title: "他们的",
             titleAccent: "评价？",
             subtitle: "来自满意客户的评价"
+        },
+        gallery: {
+            title: "旅游",
+            titleAccent: "画廊",
+            subtitle: "与我们一起难忘的时刻"
         },
         footer: {
             about: "东爪哇难忘假期的优质旅游方案。",
