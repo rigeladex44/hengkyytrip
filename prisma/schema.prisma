@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Booking {
+  id            String   @id @default(cuid())
+  customerName  String
+  customerPhone String
+  customerEmail String?
+  type          String   // 'TOUR' or 'CAR_RENTAL'
+  status        String   @default("PENDING") // PENDING, PAID, CANCELLED, COMPLETED
+  startDate     DateTime
+  endDate       DateTime
+  totalAmount   Float
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  vehicleId     String?
+  vehicle       Vehicle? @relation(fields: [vehicleId], references: [id])
+  tourPackageId String?
+  tourPackage   TourPackage? @relation(fields: [tourPackageId], references: [id])
+}
+
+model Vehicle {
+  id           String   @id @default(cuid())
+  plateNumber  String   @unique
+  brand        String
+  model        String
+  year         Int
+  status       String   @default("AVAILABLE") // AVAILABLE, RENTED, MAINTENANCE
+  pricePerDay  Float
+  bookings     Booking[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model TourPackage {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  duration    Int      // in days
+  location    String
+  imageUrl    String?
+  bookings    Booking[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Transaction {
+  id          String   @id @default(cuid())
+  type        String   // 'INCOME' or 'EXPENSE'
+  amount      Float
+  description String
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
