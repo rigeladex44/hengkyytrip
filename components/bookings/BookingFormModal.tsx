@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 
 type BookingFormModalProps = {
@@ -11,16 +11,27 @@ type BookingFormModalProps = {
 
 export default function BookingFormModal({ isOpen, onClose, onSuccess }: BookingFormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [tours, setTours] = useState<any[]>([])
+  const [vehicles, setVehicles] = useState<any[]>([])
   const [formData, setFormData] = useState({
     customerName: '',
     customerPhone: '',
     customerEmail: '',
     type: 'TOUR',
+    tourPackageId: '',
+    vehicleId: '',
+    customName: '',
     startDate: '',
     endDate: '',
     totalAmount: '',
     notes: ''
   })
+
+  // Fetch options on mount
+  useEffect(() => {
+    fetch('/api/tours').then(res => res.json()).then(data => setTours(Array.isArray(data) ? data : []))
+    fetch('/api/vehicles').then(res => res.json()).then(data => setVehicles(Array.isArray(data) ? data : []))
+  }, [])
 
   if (!isOpen) return null
 
@@ -29,10 +40,23 @@ export default function BookingFormModal({ isOpen, onClose, onSuccess }: Booking
     setIsSubmitting(true)
 
     try {
+      // If 'CUSTOM' or empty is selected, send null so Prisma doesn't crash on foreign key constraint
+      // Also append the custom name to the notes if present
+      const finalNotes = formData.customName 
+        ? `Custom Request: ${formData.customName}\n\n${formData.notes}`.trim() 
+        : formData.notes
+
+      const payload = {
+        ...formData,
+        notes: finalNotes,
+        tourPackageId: formData.tourPackageId === 'CUSTOM' || !formData.tourPackageId ? null : formData.tourPackageId,
+        vehicleId: formData.vehicleId === 'CUSTOM' || !formData.vehicleId ? null : formData.vehicleId,
+      }
+
       const res = await fetch('/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       })
 
       if (res.ok) {
@@ -103,7 +127,7 @@ export default function BookingFormModal({ isOpen, onClose, onSuccess }: Booking
                 <select 
                   required
                   value={formData.type}
-                  onChange={e => setFormData({...formData, type: e.target.value})}
+                  onChange={e => setFormData({...formData, type: e.target.value, tourPackageId: '', vehicleId: ''})}
                   className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-black focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all"
                 >
                   <option value="TOUR">Tour Package</option>
@@ -111,6 +135,72 @@ export default function BookingFormModal({ isOpen, onClose, onSuccess }: Booking
                 </select>
               </div>
             </div>
+
+            {/* Dynamic Selection Based on Type */}
+            {formData.type === 'TOUR' ? (
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-gray-500 uppercase">Select Tour Package *</label>
+                  <select 
+                    required
+                    value={formData.tourPackageId}
+                    onChange={e => setFormData({...formData, tourPackageId: e.target.value})}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-black focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all"
+                  >
+                    <option value="" disabled>-- Choose a Tour Package --</option>
+                    <option value="CUSTOM" className="font-bold text-black">✨ Custom Tour (Isi Manual)</option>
+                    {tours.map(t => (
+                      <option key={t.id} value={t.id}>{t.title} - IDR {t.price.toLocaleString('id-ID')}</option>
+                    ))}
+                  </select>
+                </div>
+                {formData.tourPackageId === 'CUSTOM' && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-gray-500 uppercase">Tulis Nama Tour Custom *</label>
+                    <input 
+                      type="text" 
+                      required
+                      placeholder="Contoh: Bromo + Kawah Ijen 4 Hari 3 Malam"
+                      value={formData.customName}
+                      onChange={e => setFormData({...formData, customName: e.target.value})}
+                      className="w-full bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-2.5 text-sm text-black focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all"
+                    />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-gray-500 uppercase">Select Vehicle *</label>
+                  <select 
+                    required
+                    value={formData.vehicleId}
+                    onChange={e => setFormData({...formData, vehicleId: e.target.value})}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-black focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all"
+                  >
+                    <option value="" disabled>-- Choose a Vehicle --</option>
+                    <option value="CUSTOM" className="font-bold text-black">✨ Custom Vehicle (Isi Manual)</option>
+                    {vehicles.map(v => (
+                      <option key={v.id} value={v.id}>{v.brand} {v.model} ({v.plateNumber}) - IDR {v.pricePerDay.toLocaleString('id-ID')}/day</option>
+                    ))}
+                  </select>
+                </div>
+                {formData.vehicleId === 'CUSTOM' && (
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-gray-500 uppercase">Tulis Kendaraan Custom *</label>
+                    <input 
+                      type="text" 
+                      required
+                      placeholder="Contoh: Alphard / Bus Pariwisata"
+                      value={formData.customName}
+                      onChange={e => setFormData({...formData, customName: e.target.value})}
+                      className="w-full bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-2.5 text-sm text-black focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-1">

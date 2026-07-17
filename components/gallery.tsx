@@ -21,13 +21,13 @@ export default function Gallery() {
              
              if (index % 5 === 0) {
                 span = "md:col-span-2 md:row-span-2"
-                aspect = "aspect-square md:aspect-auto"
+                aspect = "md:aspect-auto"
              } else if (index % 5 === 2) {
                 span = "md:col-span-1 md:row-span-2"
-                aspect = "aspect-[4/3] md:aspect-[3/4]"
+                aspect = "md:aspect-[3/4]"
              } else if (index % 5 === 4) {
                 span = "md:col-span-2 md:row-span-1"
-                aspect = "aspect-video"
+                aspect = "md:aspect-video"
              }
 
              return { url, span, aspect }
@@ -65,16 +65,24 @@ export default function Gallery() {
           </motion.p>
         </div>
 
-        {/* Bento/Masonry Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-3 gap-4 md:gap-6 md:auto-rows-[250px]">
-          {images.map((image, index) => (
+        {/* Bento/Masonry Grid (Desktop) & Horizontal Slider (Mobile) */}
+        <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory hide-scrollbar md:grid-cols-4 md:grid-rows-3 gap-4 md:gap-6 md:auto-rows-[250px] pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0">
+          {images.map((image, index) => {
+            const isLargeOnMobile = index % 2 === 0;
+            const mobileClasses = isLargeOnMobile 
+              ? "w-[75vw] h-[60vh] shrink-0" 
+              : "w-[55vw] h-[40vh] shrink-0 my-auto";
+
+            return (
             <motion.div
               key={index}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: (index % 5) * 0.1 }}
-              className={`group relative overflow-hidden rounded-sm bg-gray-900 ${image.span} ${image.aspect} md:h-full`}
+              className={`group relative overflow-hidden rounded-sm bg-gray-900 snap-center
+                ${mobileClasses} md:w-auto md:h-full md:shrink
+                ${image.span} ${image.aspect}`}
             >
               <img 
                 src={image.url} 
@@ -88,7 +96,7 @@ export default function Gallery() {
                 <div className="w-12 h-[1px] bg-[var(--color-sand)] mt-4"></div>
               </div>
             </motion.div>
-          ))}
+          )})}
         </div>
 
       </div>

@@ -13,7 +13,7 @@ type TourPackage = {
   imageUrl: string | null
 }
 
-export default function TourCardGrid() {
+export default function TourCardGrid({ onEdit }: { onEdit?: (tour: TourPackage) => void }) {
   const [tours, setTours] = useState<TourPackage[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -113,7 +113,11 @@ export default function TourCardGrid() {
 
             {/* Hover Action Buttons */}
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-[2px]">
-              <button className="w-10 h-10 bg-white text-black rounded-full flex items-center justify-center hover:bg-gold hover:text-black hover:scale-110 transition-all shadow-lg" title="Edit Package">
+              <button 
+                onClick={() => onEdit && onEdit(tour)}
+                className="w-10 h-10 bg-white text-black rounded-full flex items-center justify-center hover:bg-gold hover:text-black hover:scale-110 transition-all shadow-lg" 
+                title="Edit Package"
+              >
                 <Edit size={16} />
               </button>
               <button 

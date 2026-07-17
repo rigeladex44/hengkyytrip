@@ -68,7 +68,7 @@ export function ImageSlider({ images, className = "", autoPlayInterval = 5000, d
   }
 
   return (
-    <div 
+    <div
       className={`relative overflow-hidden w-full h-full ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -131,9 +131,8 @@ export function ImageSlider({ images, className = "", autoPlayInterval = 5000, d
                   setDirection(index > currentIndex ? 1 : -1)
                   setCurrentIndex(index)
                 }}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? "bg-white w-6" : "bg-white/40 hover:bg-white/80"
-                }`}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentIndex ? "bg-white w-6" : "bg-white/40 hover:bg-white/80"
+                  }`}
               />
             ))}
           </div>

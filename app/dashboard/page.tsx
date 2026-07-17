@@ -42,23 +42,23 @@ export default function DashboardOverview() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard 
           title="Total Revenue" 
-          value="Rp 12.5M" 
-          trend="+15%" 
+          value="Rp 0" 
+          trend="0%" 
           isPositive={true} 
           icon={<TrendingUp className="text-gold" size={24} />} 
           delay={0.1}
         />
         <StatCard 
           title="Active Bookings" 
-          value="24" 
-          trend="+4%" 
+          value="0" 
+          trend="0%" 
           isPositive={true} 
           icon={<CalendarCheck className="text-black" size={24} />} 
           delay={0.2}
         />
         <StatCard 
           title="Vehicles Rented" 
-          value="8 / 15" 
+          value="0 / 0" 
           trend="Stable" 
           isPositive={true} 
           icon={<CarFront className="text-gray-600" size={24} />} 
@@ -66,8 +66,8 @@ export default function DashboardOverview() {
         />
         <StatCard 
           title="Total Clients" 
-          value="142" 
-          trend="+12" 
+          value="0" 
+          trend="0" 
           isPositive={true} 
           icon={<Users className="text-gold" size={24} />} 
           delay={0.4}
@@ -81,33 +81,15 @@ export default function DashboardOverview() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="lg:col-span-2 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm"
+          className="lg:col-span-2 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm flex flex-col"
         >
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-lg font-bold tracking-tight text-black">Recent Bookings</h2>
             <button className="text-sm font-medium text-gold hover:text-black transition-colors">View All</button>
           </div>
           
-          <div className="space-y-4">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-gold/30 hover:bg-white transition-all group shadow-sm hover:shadow-md">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-black text-gold flex items-center justify-center shadow-inner">
-                    <CarFront size={20} />
-                  </div>
-                  <div>
-                    <h3 className="text-black font-semibold group-hover:text-gold transition-colors">Avanza Veloz 2023</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">Rented by: Bpk. Budi Santoso</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-700 mb-1">
-                    Active
-                  </span>
-                  <p className="text-xs text-gray-400 font-medium">Ends in 2 days</p>
-                </div>
-              </div>
-            ))}
+          <div className="flex-1 flex items-center justify-center border-2 border-dashed border-gray-100 rounded-xl p-8">
+            <p className="text-gray-400 text-sm font-medium text-center">No recent bookings found.<br/>New bookings will appear here.</p>
           </div>
         </motion.div>
 
@@ -133,17 +115,8 @@ export default function DashboardOverview() {
 
           <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
             <h2 className="text-lg font-bold tracking-tight text-black mb-4">Upcoming Tours</h2>
-            <div className="space-y-5">
-              <div className="pl-4 border-l-2 border-gold relative">
-                <div className="absolute w-2 h-2 bg-gold rounded-full -left-[5px] top-1.5 shadow-[0_0_8px_rgba(197,160,89,0.8)]"></div>
-                <h3 className="text-sm font-bold text-black">Bali 3D2N Explorer</h3>
-                <p className="text-xs text-gray-500 mt-1 font-medium">Tomorrow, 08:00 AM • 12 Guests</p>
-              </div>
-              <div className="pl-4 border-l-2 border-black relative">
-                <div className="absolute w-2 h-2 bg-black rounded-full -left-[5px] top-1.5"></div>
-                <h3 className="text-sm font-bold text-black">Bromo Sunrise</h3>
-                <p className="text-xs text-gray-500 mt-1 font-medium">Oct 15, 02:00 AM • 4 Guests</p>
-              </div>
+            <div className="flex items-center justify-center border-2 border-dashed border-gray-100 rounded-xl p-6">
+              <p className="text-gray-400 text-sm font-medium text-center">No upcoming tours scheduled.</p>
             </div>
           </div>
         </motion.div>

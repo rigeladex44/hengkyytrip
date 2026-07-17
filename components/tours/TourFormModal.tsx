@@ -7,9 +7,10 @@ type TourFormModalProps = {
   isOpen: boolean
   onClose: () => void
   onSuccess: () => void
+  tourToEdit?: any
 }
 
-export default function TourFormModal({ isOpen, onClose, onSuccess }: TourFormModalProps) {
+export default function TourFormModal({ isOpen, onClose, onSuccess, tourToEdit }: TourFormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     title: '',
@@ -19,6 +20,27 @@ export default function TourFormModal({ isOpen, onClose, onSuccess }: TourFormMo
     location: '',
     imageUrl: ''
   })
+  const [imageFile, setImageFile] = useState<File | null>(null)
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  import_react: {
+    const { useEffect } = require('react')
+    useEffect(() => {
+      if (tourToEdit) {
+        setFormData({
+          title: tourToEdit.title || '',
+          description: tourToEdit.description || '',
+          price: tourToEdit.price?.toString() || '',
+          duration: tourToEdit.duration?.toString() || '',
+          location: tourToEdit.location || '',
+          imageUrl: tourToEdit.imageUrl || ''
+        })
+      } else {
+        setFormData({ title: '', description: '', price: '', duration: '', location: '', imageUrl: '' })
+      }
+      setImageFile(null)
+    }, [tourToEdit, isOpen])
+  }
 
   if (!isOpen) return null
 
@@ -27,16 +49,31 @@ export default function TourFormModal({ isOpen, onClose, onSuccess }: TourFormMo
     setIsSubmitting(true)
 
     try {
-      const res = await fetch('/api/tours', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+      const isEditing = !!tourToEdit
+      const url = isEditing ? `/api/tours/${tourToEdit.id}` : '/api/tours'
+      const method = isEditing ? 'PATCH' : 'POST'
+
+      const res = await fetch(url, {
+        method,
+        body: (() => {
+          const fd = new FormData()
+          fd.append('title', formData.title)
+          fd.append('description', formData.description)
+          fd.append('price', formData.price)
+          fd.append('duration', formData.duration)
+          fd.append('location', formData.location)
+          if (imageFile) {
+            fd.append('image', imageFile)
+          }
+          return fd
+        })()
       })
 
       if (res.ok) {
         onSuccess()
         onClose()
         setFormData({ title: '', description: '', price: '', duration: '', location: '', imageUrl: '' })
+        setImageFile(null)
       } else {
         const error = await res.json()
         alert(error.error || 'Failed to create tour package')
@@ -53,7 +90,7 @@ export default function TourFormModal({ isOpen, onClose, onSuccess }: TourFormMo
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-black">Add Tour Package</h2>
+          <h2 className="text-lg font-bold text-black">{tourToEdit ? 'Edit Tour Package' : 'Add Tour Package'}</h2>
           <button 
             onClick={onClose}
             className="p-2 text-gray-400 hover:text-black hover:bg-gray-100 rounded-full transition-colors"
@@ -127,14 +164,22 @@ export default function TourFormModal({ isOpen, onClose, onSuccess }: TourFormMo
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-gray-500 uppercase">Image URL</label>
-                <input 
-                  type="url" 
-                  value={formData.imageUrl}
-                  onChange={e => setFormData({...formData, imageUrl: e.target.value})}
-                  placeholder="https://example.com/image.jpg"
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-black focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all"
-                />
+                <label className="text-xs font-semibold text-gray-500 uppercase">Package Image</label>
+                <div className="flex items-center gap-3">
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    onChange={e => {
+                      if (e.target.files && e.target.files[0]) {
+                        setImageFile(e.target.files[0])
+                      }
+                    }}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm text-gray-500 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-gray-200 file:text-black hover:file:bg-gray-300"
+                  />
+                  {formData.imageUrl && !imageFile && (
+                    <img src={formData.imageUrl} alt="Current" className="w-10 h-10 rounded-md object-cover border border-gray-200" />
+                  )}
+                </div>
               </div>
             </div>
 

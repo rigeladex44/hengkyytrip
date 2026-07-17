@@ -8,6 +8,17 @@ import { Plus } from 'lucide-react'
 export default function SchedulePage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
+  const [editingTour, setEditingTour] = useState<any>(null)
+
+  const handleEdit = (tour: any) => {
+    setEditingTour(tour)
+    setIsModalOpen(true)
+  }
+
+  const handleClose = () => {
+    setIsModalOpen(false)
+    setTimeout(() => setEditingTour(null), 300)
+  }
 
   return (
     <div className="space-y-6">
@@ -26,12 +37,13 @@ export default function SchedulePage() {
         </button>
       </div>
 
-      <TourCardGrid key={refreshKey} />
+      <TourCardGrid key={refreshKey} onEdit={handleEdit} />
 
       <TourFormModal 
         isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+        onClose={handleClose} 
         onSuccess={() => setRefreshKey(prev => prev + 1)}
+        tourToEdit={editingTour}
       />
     </div>
   )

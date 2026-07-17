@@ -1,17 +1,10 @@
 import { PrismaClient } from '@prisma/client'
-import { PrismaLibSql } from '@prisma/adapter-libsql'
-import { createClient } from '@libsql/client'
+import path from 'path'
 
 const prismaClientSingleton = () => {
-  // Prisma 7 core engine validation workaround
-  process.env.DATABASE_URL = 'file:./dev.db'
-  
-  const libsql = createClient({
-    url: 'file:./dev.db',
-  })
-  const adapter = new PrismaLibSql(libsql)
-  
-  return new PrismaClient({ adapter })
+  const dbPath = path.join(process.cwd(), 'dev.db')
+  process.env.DATABASE_URL = `file:${dbPath}`
+  return new PrismaClient()
 }
 
 declare global {
@@ -19,7 +12,6 @@ declare global {
 }
 
 const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
-
 export default prisma
 
 if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma

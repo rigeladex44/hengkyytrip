@@ -45,10 +45,21 @@ export default function Packages() {
   const { t } = useLanguage()
 
   useEffect(() => {
-    fetch('/data/packages.json')
+    fetch('/api/tours')
       .then(res => res.json())
       .then(data => {
-        setPackages(data)
+        if (Array.isArray(data)) {
+          const mappedPackages = data.map((t: any) => ({
+            id: t.id,
+            name: t.title,
+            price: t.price.toString(),
+            duration: `${t.duration} Days`,
+            pax: "1",
+            description: t.description,
+            image: t.imageUrl || '/placeholder.jpg'
+          }))
+          setPackages(mappedPackages)
+        }
         setLoading(false)
       })
       .catch(err => {
