@@ -13,9 +13,9 @@ export async function GET() {
       update: {},
       create: {
         email: 'admin@hengkyytrip.com',
-        name: 'Admin Utama',
+        name: 'Super Admin',
         password: hashedPassword,
-        role: 'admin',
+        role: 'super-admin',
       },
     })
 

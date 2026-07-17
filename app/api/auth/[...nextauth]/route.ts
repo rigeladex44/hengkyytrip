@@ -16,14 +16,28 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        const user = await prisma.user.findUnique({
+        let user = await prisma.user.findUnique({
           where: {
             email: credentials.email
           }
         })
 
         if (!user) {
-          return null
+          // Fallback: If no users exist at all in DB, create the first admin user
+          const userCount = await prisma.user.count()
+          if (userCount === 0 && credentials.email === "admin@hengkyytrip.com") {
+            const hashedPassword = await bcrypt.hash(credentials.password, 10)
+            user = await prisma.user.create({
+              data: {
+                email: credentials.email,
+                name: "Super Admin",
+                password: hashedPassword,
+                role: "super-admin"
+              }
+            })
+          } else {
+            return null
+          }
         }
 
         const isPasswordValid = await bcrypt.compare(
@@ -52,8 +66,18 @@ export const authOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
-      if (session.user) {
-        (session.user as any).role = token.role
+      if (session.user && session.user.email) {
+        // Force refresh from DB so changes apply immediately
+        const dbUser = await prisma.user.findUnique({
+          where: { email: session.user.email }
+        })
+        
+        if (dbUser) {
+          (session.user as any).role = dbUser.role
+          session.user.name = dbUser.name
+        } else {
+          (session.user as any).role = token.role
+        }
       }
       return session
     }

@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { signOut } from "next-auth/react"
 import { 
   LayoutDashboard, 
   CalendarDays, 
@@ -14,7 +15,8 @@ import {
   Search,
   Map,
   Menu,
-  X
+  X,
+  Users
 } from "lucide-react"
 
 export default function DashboardLayout({
@@ -64,11 +66,15 @@ export default function DashboardLayout({
           <p className="px-4 text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-4">Finance & Admin</p>
           
           <NavItem href="/dashboard/finance" icon={<Wallet size={18} />} label="Finance" active={pathname === "/dashboard/finance"} onClick={() => setIsMobileMenuOpen(false)} />
+          <NavItem href="/dashboard/users" icon={<Users size={18} />} label="Users" active={pathname === "/dashboard/users"} onClick={() => setIsMobileMenuOpen(false)} />
           <NavItem href="/dashboard/settings" icon={<Settings size={18} />} label="Settings" active={pathname === "/dashboard/settings"} onClick={() => setIsMobileMenuOpen(false)} />
         </div>
 
         <div className="p-4 border-t border-gray-100">
-          <button className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-50 rounded-xl transition-all group">
+          <button 
+            onClick={() => signOut({ callbackUrl: '/login' })}
+            className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-50 rounded-xl transition-all group"
+          >
             <LogOut size={18} className="group-hover:-translate-x-1 transition-transform" />
             <span>Sign Out</span>
           </button>

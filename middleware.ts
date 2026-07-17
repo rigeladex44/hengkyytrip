@@ -7,7 +7,7 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: () => true, // Temporarily bypass auth
+      authorized: ({ token }) => !!token, // Require valid token to access dashboard
     },
     pages: {
       signIn: "/login",
