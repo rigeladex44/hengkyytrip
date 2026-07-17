@@ -160,7 +160,7 @@ export default function LoginPage() {
 
           <div className="mt-12 text-center border-t border-gray-100 pt-6">
             <p className="text-xs text-gray-400">
-              Protected by advanced encryption.
+              Protected by ADEX IDN Encryption.
             </p>
           </div>
         </motion.div>
