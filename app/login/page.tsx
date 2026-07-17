@@ -119,7 +119,6 @@ export default function LoginPage() {
                   required
                   className="w-full bg-gray-50 border border-gray-200 rounded-xl py-4 pl-12 pr-4 text-black placeholder:text-gray-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-all"
                   placeholder="admin@hengkyytrip.com"
-                  defaultValue="admin@hengkyytrip.com"
                 />
               </div>
             </div>
@@ -139,7 +138,6 @@ export default function LoginPage() {
                   required
                   className="w-full bg-gray-50 border border-gray-200 rounded-xl py-4 pl-12 pr-4 text-black placeholder:text-gray-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-all"
                   placeholder="••••••••••••"
-                  defaultValue="admin123"
                 />
               </div>
             </div>
